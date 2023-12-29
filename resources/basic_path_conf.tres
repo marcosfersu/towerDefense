@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PathGeneratorConfig" load_steps=2 format=3 uid="uid://bc7whyk7dmcyd"]
+
+[ext_resource type="Script" path="res://components/path_display/path_generator_config.gd" id="1_4ki7o"]
+
+[resource]
+script = ExtResource("1_4ki7o")
+map_length = 16
+map_height = 10
+min_path_size = 50
+max_path_size = 70
+add_loops = false
+min_loops = 2
+max_loops = 3
