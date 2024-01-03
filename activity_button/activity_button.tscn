@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsed5lntsotcl"]
+
+[ext_resource type="Script" path="res://activity_button.gd" id="1_sw5v0"]
+[ext_resource type="Texture2D" uid="uid://ccj2jwk85urse" path="res://images/cannon01a.png" id="2_hdmsx"]
+[ext_resource type="PackedScene" uid="uid://denvhr7jqf362" path="res://components/weapons/turret_!.tscn" id="3_geve4"]
+
+[node name="ActivityButton" type="Button"]
+custom_minimum_size = Vector2(96, 96)
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_sw5v0")
+activity_button_icon = ExtResource("2_hdmsx")
+activity_draggable = ExtResource("3_geve4")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]

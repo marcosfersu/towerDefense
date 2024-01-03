@@ -1,0 +1,114 @@
+[gd_scene load_steps=11 format=3 uid="uid://b5d41qv3txg14"]
+
+[ext_resource type="PackedScene" uid="uid://c2ki6be638lhu" path="res://assets/enemy_ufoRed.glb" id="1_n1mjk"]
+[ext_resource type="Script" path="res://components/basic_enemy/basic_enemy.gd" id="1_yahlh"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_1vwp8"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_p1wc5"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_1fsh8"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_2kaqn"]
+
+[sub_resource type="Animation" id="Animation_vxm4l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D/enemy_ufoRed2:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_a3a8k"]
+resource_name = "despawn"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D/enemy_ufoRed2:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2m7sm"]
+resource_name = "spawn"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D/enemy_ufoRed2:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sid3o"]
+_data = {
+"RESET": SubResource("Animation_vxm4l"),
+"despawn": SubResource("Animation_a3a8k"),
+"spawn": SubResource("Animation_2m7sm")
+}
+
+[node name="BasicEnemy" type="Node3D"]
+script = ExtResource("1_yahlh")
+
+[node name="EnemyStateChart" type="Node" parent="."]
+script = ExtResource("2_1vwp8")
+
+[node name="CompoundState" type="Node" parent="EnemyStateChart"]
+script = ExtResource("3_p1wc5")
+initial_state = NodePath("Spawning")
+
+[node name="Spawning" type="Node" parent="EnemyStateChart/CompoundState"]
+script = ExtResource("4_1fsh8")
+
+[node name="ToTravelling" type="Node" parent="EnemyStateChart/CompoundState/Spawning"]
+script = ExtResource("5_2kaqn")
+to = NodePath("../../Travelling")
+event = &"to_travelling"
+
+[node name="Travelling" type="Node" parent="EnemyStateChart/CompoundState"]
+script = ExtResource("4_1fsh8")
+
+[node name="toDespawning" type="Node" parent="EnemyStateChart/CompoundState/Travelling"]
+script = ExtResource("5_2kaqn")
+to = NodePath("../../Despawning")
+event = &"to_despawning"
+
+[node name="Attacking" type="Node" parent="EnemyStateChart/CompoundState"]
+script = ExtResource("4_1fsh8")
+
+[node name="Dying" type="Node" parent="EnemyStateChart/CompoundState"]
+script = ExtResource("4_1fsh8")
+
+[node name="Despawning" type="Node" parent="EnemyStateChart/CompoundState"]
+script = ExtResource("4_1fsh8")
+
+[node name="Path3D" type="Path3D" parent="."]
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+loop = false
+
+[node name="enemy_ufoRed2" parent="Path3D/PathFollow3D" instance=ExtResource("1_n1mjk")]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.25, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sid3o")
+}
+
+[connection signal="state_entered" from="EnemyStateChart/CompoundState/Spawning" to="." method="_on_spawning_state_entered"]
+[connection signal="state_processing" from="EnemyStateChart/CompoundState/Travelling" to="." method="_on_travelling_state_processing"]
+[connection signal="state_entered" from="EnemyStateChart/CompoundState/Despawning" to="." method="_on_despawning_state_entered"]

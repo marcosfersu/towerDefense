@@ -1,28 +1,64 @@
-[gd_scene load_steps=11 format=3 uid="uid://i71rtmkkjxgt"]
+[gd_scene load_steps=14 format=3 uid="uid://i71rtmkkjxgt"]
 
 [ext_resource type="Script" path="res://components/path_display/path_display.gd" id="1_en18q"]
-[ext_resource type="PackedScene" uid="uid://btf0jka7ikjfx" path="res://assets/tile_endRoundSpawn.glb" id="2_2md6o"]
-[ext_resource type="PackedScene" uid="uid://bepx5m7bnqa31" path="res://assets/tile_straight.glb" id="2_8nabp"]
-[ext_resource type="PackedScene" uid="uid://0eok8ff1mn4f" path="res://assets/tile_cornerRound.glb" id="3_iqjqi"]
-[ext_resource type="PackedScene" uid="uid://bbtvbjam3w7yb" path="res://assets/tile_crystal.glb" id="5_4wjb1"]
-[ext_resource type="PackedScene" uid="uid://u2s5tgrmdg6y" path="res://assets/tile_rock.glb" id="6_74d6d"]
-[ext_resource type="PackedScene" uid="uid://bm28scfp0ldcc" path="res://assets/tile_crossing.glb" id="6_xc4iu"]
-[ext_resource type="PackedScene" uid="uid://bk5deujrejeuh" path="res://assets/tile_tree.glb" id="7_24fbr"]
-[ext_resource type="PackedScene" uid="uid://dxwh07n0xk3bb" path="res://assets/tile.glb" id="8_5cgay"]
-[ext_resource type="PackedScene" uid="uid://d2gnab1q74oua" path="res://assets/enemy_ufoGreen.glb" id="10_lpem0"]
+[ext_resource type="PackedScene" uid="uid://bxoclsho35m1x" path="res://components/tiles_display/tile_endRoundSpawn.tscn" id="2_62d8q"]
+[ext_resource type="PackedScene" uid="uid://r7xpf4kgv8wy" path="res://components/tiles_display/tile_straight.tscn" id="3_oypma"]
+[ext_resource type="PackedScene" uid="uid://cbhslxmgy0gij" path="res://components/tiles_display/tile_cornerRound.tscn" id="4_l51y5"]
+[ext_resource type="PackedScene" uid="uid://cy8cunihugmj6" path="res://components/tiles_display/tiles_crossing.tscn" id="5_cnhk7"]
+[ext_resource type="PackedScene" uid="uid://dhlixcnppa1r6" path="res://components/tiles_display/tile_crystal.tscn" id="7_0jqxb"]
+[ext_resource type="PackedScene" uid="uid://eqka24xilvsm" path="res://components/tiles_display/tile_rock.tscn" id="8_tsy6e"]
+[ext_resource type="PackedScene" uid="uid://b5dxyq5jgxavk" path="res://components/tiles_display/tile_tree.tscn" id="9_d0cqv"]
+[ext_resource type="PackedScene" uid="uid://ctoo1cr6yxiu0" path="res://components/tiles_display/tile.tscn" id="10_hnjgd"]
+[ext_resource type="PackedScene" uid="uid://bsed5lntsotcl" path="res://activity_button/activity_button.tscn" id="11_o44go"]
+[ext_resource type="PackedScene" uid="uid://b5d41qv3txg14" path="res://components/basic_enemy/basic_enemy.tscn" id="11_txbi3"]
+
+[sub_resource type="Environment" id="Environment_7rs86"]
+background_mode = 1
+background_color = Color(0.345098, 0.462745, 0.584314, 1)
+ssil_enabled = true
+adjustment_enabled = true
+adjustment_contrast = 1.25
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_toj8q"]
 
 [node name="path_display" type="Node3D"]
 script = ExtResource("1_en18q")
-tile_start = ExtResource("2_2md6o")
-tile_end = ExtResource("2_2md6o")
-tile_straight = ExtResource("2_8nabp")
-tile_corner = ExtResource("3_iqjqi")
-tile_crossroads = ExtResource("6_xc4iu")
-tile_enemy = ExtResource("10_lpem0")
-tile_empty = Array[PackedScene]([ExtResource("5_4wjb1"), ExtResource("6_74d6d"), ExtResource("7_24fbr"), ExtResource("8_5cgay"), ExtResource("8_5cgay"), ExtResource("8_5cgay"), ExtResource("8_5cgay"), ExtResource("8_5cgay")])
+tile_start = ExtResource("2_62d8q")
+tile_end = ExtResource("2_62d8q")
+tile_straight = ExtResource("3_oypma")
+tile_corner = ExtResource("4_l51y5")
+tile_crossroads = ExtResource("5_cnhk7")
+tile_empty = Array[PackedScene]([ExtResource("7_0jqxb"), ExtResource("8_tsy6e"), ExtResource("9_d0cqv"), ExtResource("10_hnjgd"), ExtResource("10_hnjgd"), ExtResource("10_hnjgd"), ExtResource("10_hnjgd"), ExtResource("10_hnjgd")])
+basic_enemy = ExtResource("11_txbi3")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.43281, 0.901485, 0, -0.901485, 0.43281, 7.10545, 8.18694, 9.23536)
+transform = Transform3D(1, 0, 0, 0, 0.422618, 0.906308, 0, -0.906308, 0.422618, 7.5, 9, 9.5)
+fov = 60.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.998426, -0.0224339, 0.0514005, 0, 0.916509, 0.400013, -0.0560829, -0.399384, 0.915067, 3.20003, 8.821, 6.79739)
+light_energy = 2.078
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7rs86")
+camera_attributes = SubResource("CameraAttributesPractical_toj8q")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.002
+offset_bottom = -0.296082
+
+[node name="Button" parent="Control" instance=ExtResource("11_o44go")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -109.0
+offset_right = 48.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 0
